@@ -88,13 +88,12 @@
 <ol>
 <li>几乎和insert一样的用法，区别在插入字段中必须要有唯一字段比如主键，索引</li>
 </ol>
-<p>~~bash<br>replace into tabname(id, name, createtime) values (1, ‘name’, ‘2020-08-18’);<br>~~</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime) values (1, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;2020-08-18&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ol start="2">
 <li>Select 查询结果作为值传递给Insert</li>
 </ol>
-<p>~~bash<br>replace into tabname(id, name, createtime)<br>select(<br>	select id<br>		FROM<br>		tabname<br>		WHERE<br>		createdate &#x3D; ‘2022-02-01’<br>)<br>	id,’test’,’2022-08-18;</p>
-<pre><code>
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime)</span><br><span class="line"><span class="keyword">select</span>(</span><br><span class="line">	<span class="keyword">select</span> <span class="built_in">id</span> </span><br><span class="line">		FROM </span><br><span class="line">		tabname </span><br><span class="line">		WHERE</span><br><span class="line">		createdate = <span class="string">&#x27;2022-02-01&#x27;</span></span><br><span class="line">)</span><br><span class="line">	<span class="built_in">id</span>,<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;2022-08-18;</span></span><br></pre></td></tr></table></figure>
 
 
                             <!-- Meta -->
