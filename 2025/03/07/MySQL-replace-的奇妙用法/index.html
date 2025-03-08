@@ -15,7 +15,7 @@
 
 
 
-<title>MySQL replace 的奇妙用法 | 只是条咸鱼罢了</title>
+<title>MySQL REPLACE 的奇妙用法 | 只是条咸鱼罢了</title>
 
 
 
@@ -193,7 +193,7 @@
         </h2>
       </a>
       <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
-        MySQL replace 的奇妙用法
+        MySQL REPLACE 的奇妙用法
       </div>
       <div class="flex-1"></div>
       <div class="flex items-center gap-3">
@@ -202,7 +202,7 @@
         
         
           
-            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/xbmlz">
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/TangNPC">
               <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
             </a>
           
@@ -248,12 +248,16 @@
 
 <!-- toc -->
 
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
 <section class="px-6 max-w-prose mx-auto md:px-0">
   <!-- header -->
   <header class="overflow-hidden pt-6 pb-6 md:pt-12">
     <div class="pt-4 md:pt-6">
       <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
-        MySQL replace 的奇妙用法
+        MySQL REPLACE 的奇妙用法
       </h1>
       <div>
         <section class="flex items-center gap-3 text-sm">
@@ -269,7 +273,7 @@
           <span class="text-gray-400">·</span>
           <span class="flex items-center gap-1">
             <iconify-icon width="18" icon="icon-park-outline:font-search" ></iconify-icon>
-            <span>162 words</span>
+            <span>324 words</span>
           </span>
           
         </section>
@@ -278,23 +282,42 @@
   </header>
   <!-- content -->
   <article class="post-content prose m-auto slide-enter-content dark:prose-invert">
-    <p>一个奇怪的使用方法</p>
+    <p><code>REPLACE</code> 是 MySQL 中一个非常实用的命令，可以看作是 <code>INSERT</code> 的增强版。它的主要功能是：<strong>如果表中已存在相同的主键或唯一索引记录，则先删除旧记录，再插入新记录；如果不存在，则直接插入新记录</strong>。</p>
 <span id="more"></span>
-<p>replace是insert的增强版<br>replace into 首先尝试插入数据到表中，</p>
-<p>如果发现表中已经有此行数据（根据主键或者唯一索引判断）则先删除此行数据，然后插入新的数据。<br>否则，直接插入新数据</p>
-<ol>
-<li>几乎和insert一样的用法，区别在插入字段中必须要有唯一字段比如主键，索引</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime) values (1, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;2020-08-18&#x27;</span>);</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>Select 查询结果作为值传递给Insert</li>
+<h3 id="REPLACE-的基本用法"><a href="#REPLACE-的基本用法" class="headerlink" title="REPLACE 的基本用法"></a>REPLACE 的基本用法</h3><p><code>REPLACE</code> 的语法几乎与 <code>INSERT</code> 相同，唯一的区别是：<strong>插入的字段中必须包含主键或唯一索引字段</strong>。</p>
+<h4 id="示例-1：插入单条数据"><a href="#示例-1：插入单条数据" class="headerlink" title="示例 1：插入单条数据"></a>示例 1：插入单条数据</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">REPLACE <span class="keyword">INTO</span> tabname(id, name, createtime) </span><br><span class="line"><span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;2020-08-18&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="示例-2：将查询结果作为值插入"><a href="#示例-2：将查询结果作为值插入" class="headerlink" title="示例 2：将查询结果作为值插入"></a>示例 2：将查询结果作为值插入</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">REPLACE <span class="keyword">INTO</span> tabname(id, name, createtime)</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> tabname <span class="keyword">WHERE</span> createdate <span class="operator">=</span> <span class="string">&#x27;2022-02-01&#x27;</span>) <span class="keyword">AS</span> id,</span><br><span class="line">    <span class="string">&#x27;test&#x27;</span> <span class="keyword">AS</span> name,</span><br><span class="line">    <span class="string">&#x27;2022-08-18&#x27;</span> <span class="keyword">AS</span> createtime;</span><br></pre></td></tr></table></figure>
+
+<h3 id="REPLACE-的工作原理"><a href="#REPLACE-的工作原理" class="headerlink" title="REPLACE 的工作原理"></a>REPLACE 的工作原理</h3><ol>
+<li>检查冲突：<code>REPLACE</code> 会根据主键或唯一索引检查表中是否已存在相同记录。</li>
+<li>删除旧记录：如果存在冲突，则先删除旧记录。</li>
+<li>插入新记录：插入新记录。</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime)</span><br><span class="line"><span class="keyword">select</span>(</span><br><span class="line">	<span class="keyword">select</span> <span class="built_in">id</span> </span><br><span class="line">		FROM </span><br><span class="line">		tabname </span><br><span class="line">		WHERE</span><br><span class="line">		createdate = <span class="string">&#x27;2022-02-01&#x27;</span></span><br><span class="line">)</span><br><span class="line">	<span class="built_in">id</span>,<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;2022-08-18;</span></span><br></pre></td></tr></table></figure>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ul>
+<li>性能影响：由于 <code>REPLACE</code> 可能会先删除再插入，因此在数据量较大时，可能会影响性能。</li>
+<li>字段完整性：如果表中定义了自增主键，使用 REPLACE 会导致自增值增加。</li>
+<li>触发器：REPLACE 会触发 DELETE 和 INSERT 触发器。</li>
+</ul>
 
   </article>
   <!-- tag -->
   <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/MySQL/">MySQL</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/SQL%E6%8A%80%E5%B7%A7/">SQL技巧</a>
+        </span>
+      
     
   </div>
   <!-- prev and next -->
