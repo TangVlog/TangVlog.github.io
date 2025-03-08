@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>只是条咸鱼罢了</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2025-03-08T00:35:17.114Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>heytang</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MySQL replace 的奇妙用法</title>
+    <link href="http://example.com/2025/03/07/MySQL-replace-%E7%9A%84%E5%A5%87%E5%A6%99%E7%94%A8%E6%B3%95/"/>
+    <id>http://example.com/2025/03/07/MySQL-replace-%E7%9A%84%E5%A5%87%E5%A6%99%E7%94%A8%E6%B3%95/</id>
+    <published>2025-03-07T14:29:00.000Z</published>
+    <updated>2025-03-08T00:35:17.114Z</updated>
+    
+    <content type="html"><![CDATA[<p>一个奇怪的使用方法</p><span id="more"></span><p>replace是insert的增强版<br>replace into 首先尝试插入数据到表中，</p><p>如果发现表中已经有此行数据（根据主键或者唯一索引判断）则先删除此行数据，然后插入新的数据。<br>否则，直接插入新数据</p><ol><li>几乎和insert一样的用法，区别在插入字段中必须要有唯一字段比如主键，索引</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime) values (1, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;2020-08-18&#x27;</span>);</span><br></pre></td></tr></table></figure><ol start="2"><li>Select 查询结果作为值传递给Insert</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">replace into tabname(<span class="built_in">id</span>, name, createtime)</span><br><span class="line"><span class="keyword">select</span>(</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">id</span> </span><br><span class="line">FROM </span><br><span class="line">tabname </span><br><span class="line">WHERE</span><br><span class="line">createdate = <span class="string">&#x27;2022-02-01&#x27;</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">id</span>,<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;2022-08-18;</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;一个奇怪的使用方法&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Test</title>
+    <link href="http://example.com/2025/03/07/Test/"/>
+    <id>http://example.com/2025/03/07/Test/</id>
+    <published>2025-03-07T08:16:32.000Z</published>
+    <updated>2025-03-07T08:16:32.313Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+</feed>
